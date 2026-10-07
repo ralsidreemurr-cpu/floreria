@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar producto - Florería</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        .contenedor { width: 420px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px; text-align: center; }
+        h1 { color: #c62828; }
+        .nombre-producto { font-size: 18px; font-weight: bold; margin: 15px 0 5px; }
+        button {
+            width: 100%; padding: 12px; background-color: #c62828; color: white;
+            border: none; border-radius: 6px; font-size: 15px; cursor: pointer; margin-top: 15px;
+        }
+        button:hover { background-color: #a41f1f; }
+        .volver { display: block; margin-top: 16px; color: #666; text-decoration: none; }
+        .volver:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="contenedor">
+    <h1>¿Eliminar producto?</h1>
+    <p>Esta acción no se puede deshacer.</p>
+    <p class="nombre-producto">{{ producto.nombre }}</p>
+    <p>{{ producto.descripcion }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Sí, eliminar</button>
+    </form>
+
+    <a href="{% url 'panel_admin' %}" class="volver">← Cancelar y volver</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo producto - Florería</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        .contenedor { width: 450px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px; }
+        h1 { text-align: center; color: #2e7d32; }
+        label { display: block; margin-bottom: 6px; font-weight: bold; color: #333; font-size: 14px; }
+        input[type="text"], input[type="number"], textarea {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;
+            font-size: 14px; margin-bottom: 16px; box-sizing: border-box;
+        }
+        textarea { resize: vertical; min-height: 70px; }
+        .checkbox-row { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+        .checkbox-row label { margin-bottom: 0; }
+        button {
+            width: 100%; padding: 12px; background-color: #2e7d32; color: white;
+            border: none; border-radius: 6px; font-size: 15px; cursor: pointer;
+        }
+        button:hover { background-color: #1b5e20; }
+        .volver { display: block; text-align: center; margin-top: 16px; color: #666; text-decoration: none; }
+        .volver:hover { text-decoration: underline; }
+        .errores { background: #fdecea; color: #c62828; padding: 12px 16px; border-radius: 6px; margin-bottom: 18px; }
+        .errores ul { margin: 0; padding-left: 18px; }
+        input[type="file"] { width: 100%; margin-bottom: 12px; font-size: 13px; }
+        input.invalido, textarea.invalido { border-color: #c62828; background: #fff6f5; }
+        .aviso-repetida { color: #c62828; font-size: 12px; margin: -10px 0 14px; }
+        .imagen-actual { margin-bottom: 10px; }
+        .imagen-actual img, #vista-previa { max-width: 100%; max-height: 180px; border-radius: 8px; display: block; margin: 0 auto 10px; }
+        #vista-previa[hidden], .aviso-repetida[hidden] { display: none; }
+    </style>
+</head>
+<body>
+<div class="contenedor">
+    <h1>Nuevo producto</h1>
+
+    <form method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {% include 'productos/_campos_form.html' %}
+        <button type="submit">Guardar producto</button>
+    </form>
+
+    <a href="{% url 'panel_admin' %}" class="volver">← Volver al panel</a>
+</div>
+</body>
+</html>

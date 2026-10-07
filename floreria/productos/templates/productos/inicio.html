@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Florería Flowery</title>
+    <style>
+        body {
+            font-family: 'Trebuchet MS', Arial, sans-serif;
+            background-color: #141420;
+            margin: 0;
+            padding: 0;
+            color: #f5f0dc;
+        }
+        .enredadera-izq, .enredadera-der {
+            position: fixed;
+            top: 0;
+            height: 100vh;
+            width: 80px;
+            background-image: url("{% static 'productos/img/enredadera_lateral.png' %}");
+            background-repeat: repeat-y;
+            background-size: contain;
+            opacity: 0.85;
+            z-index: 0;
+        }
+        .enredadera-izq { left: 0; }
+        .enredadera-der { right: 0; transform: scaleX(-1); }
+
+        .contenedor {
+            width: 80%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 0 60px;
+            position: relative;
+            z-index: 1;
+        }
+        .logo-wrap {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .logo-wrap img {
+            width: 110px;
+            image-rendering: pixelated;
+        }
+        h1 {
+            text-align: center;
+            color: #ffd34d;
+            text-shadow: 2px 2px 0 #3e2f0a;
+            margin-top: 0;
+        }
+        .divisoria {
+            display: block;
+            margin: 10px auto 30px;
+            width: 280px;
+            image-rendering: pixelated;
+        }
+        .btn-admin {
+            display: block;
+            width: 160px;
+            margin: 0 auto 30px;
+            background-image: url("{% static 'productos/img/inicio.png' %}");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 18px 0 14px;
+            image-rendering: pixelated;
+        }
+        .productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 30px;
+        }
+        .producto {
+            background-image: url("{% static 'productos/img/caja_de_informacion.png' %}");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            padding: 36px 24px 24px;
+            text-align: center;
+        }
+        .producto h2 {
+            margin-top: 0;
+            color: #ffd34d;
+            font-size: 18px;
+        }
+        .producto p {
+            font-size: 13px;
+            color: #e8e0c8;
+        }
+        .precio {
+            font-weight: bold;
+            color: #ffb84d;
+            font-size: 16px;
+        }
+        .stock {
+            font-size: 12px;
+            color: #bbb;
+        }
+        .foto { width: 100%; height: 150px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; display: block; }
+        .sin-foto { width: 100%; height: 150px; border-radius: 6px; background: #2a2a3d; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        .sin-productos { text-align: center; color: #bbb; grid-column: 1 / -1; }
+    </style>
+</head>
+<body>
+
+<div class="enredadera-izq"></div>
+<div class="enredadera-der"></div>
+
+<div class="contenedor">
+    <div class="logo-wrap">
+        <img src="{% static 'productos/img/CARAFLOWEY.png' %}" alt="Florería Flowery">
+    </div>
+    <h1>Florería Flowery</h1>
+    <img class="divisoria" src="{% static 'productos/img/enredadera_de_medio_abajo.png' %}" alt="">
+
+    <a href="{% url 'panel_admin' %}" class="btn-admin">Admin</a>
+
+    <div class="productos">
+        {% for producto in productos %}
+        <div class="producto">
+            {% if producto.imagen %}<img src="{{ producto.imagen.url }}" class="foto" alt="{{ producto.nombre }}">
+            {% else %}<div class="sin-foto">🌼</div>{% endif %}
+            <h2>{{ producto.nombre }}</h2>
+            <p>{{ producto.descripcion }}</p>
+            <p class="precio">${{ producto.precio }}</p>
+            <p class="stock">Stock: {{ producto.stock }}</p>
+        </div>
+        {% empty %}
+        <p class="sin-productos">No hay productos disponibles por el momento.</p>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

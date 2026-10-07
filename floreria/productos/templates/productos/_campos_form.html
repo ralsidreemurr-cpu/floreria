@@ -1,0 +1,88 @@
+{# Campos compartidos por los formularios de crear y editar #}
+{% if form.errors %}
+<div class="errores">
+    <strong>Revisa los campos marcados:</strong>
+    <ul>
+        {% for campo, lista in form.errors.items %}
+            {% for error in lista %}<li>{{ error }}</li>{% endfor %}
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<label for="{{ form.nombre.id_for_label }}">Nombre:</label>
+{{ form.nombre }}
+<div class="aviso-repetida" hidden>⚠ Hay una letra repetida muchas veces seguidas.</div>
+
+<label for="{{ form.descripcion.id_for_label }}">Descripción:</label>
+{{ form.descripcion }}
+<div class="aviso-repetida" hidden>⚠ Hay una letra repetida muchas veces seguidas.</div>
+
+<label for="{{ form.tipo_flor.id_for_label }}">Tipo de flor:</label>
+{{ form.tipo_flor }}
+<div class="aviso-repetida" hidden>⚠ Hay una letra repetida muchas veces seguidas.</div>
+
+<label for="{{ form.precio.id_for_label }}">Precio:</label>
+{{ form.precio }}
+
+<label for="{{ form.stock.id_for_label }}">Stock:</label>
+{{ form.stock }}
+
+<label for="{{ form.imagen.id_for_label }}">Imagen (JPG, PNG o WEBP, máx. 2 MB):</label>
+{% if producto and producto.imagen %}
+<div class="imagen-actual">
+    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+    <div class="checkbox-row">
+        {{ form.eliminar_imagen }}
+        <label for="{{ form.eliminar_imagen.id_for_label }}">Quitar imagen actual</label>
+    </div>
+</div>
+{% endif %}
+{{ form.imagen }}
+<img id="vista-previa" alt="Vista previa" hidden>
+
+<div class="checkbox-row">
+    {{ form.disponible }}
+    <label for="{{ form.disponible.id_for_label }}">Disponible</label>
+</div>
+
+<script>
+(function () {
+    var repetida = /([a-záéíóúüñ])\1{2,}/i;
+    var esLetra = /^[a-záéíóúüñ]$/i;
+
+    document.querySelectorAll('[data-sin-repetir]').forEach(function (campo) {
+        var aviso = campo.nextElementSibling;
+
+        // Si se deja apretada una tecla (auto-repetición), se ignora
+        campo.addEventListener('keydown', function (e) {
+            if (e.repeat && esLetra.test(e.key)) { e.preventDefault(); }
+        });
+
+        function revisar() {
+            var mal = repetida.test(campo.value);
+            campo.classList.toggle('invalido', mal);
+            if (aviso) { aviso.hidden = !mal; }
+        }
+        campo.addEventListener('input', revisar);
+        revisar();
+    });
+
+    // Vista previa de la imagen elegida
+    var inputImg = document.querySelector('input[type=file]');
+    var vista = document.getElementById('vista-previa');
+    if (inputImg && vista) {
+        inputImg.addEventListener('change', function () {
+            var f = inputImg.files[0];
+            if (f && f.size > 2 * 1024 * 1024) {
+                alert('La imagen no puede pesar más de 2 MB.');
+                inputImg.value = '';
+                vista.hidden = true;
+                return;
+            }
+            if (f) { vista.src = URL.createObjectURL(f); vista.hidden = false; }
+            else { vista.hidden = true; }
+        });
+    }
+})();
+</script>
