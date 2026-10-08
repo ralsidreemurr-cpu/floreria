@@ -150,3 +150,28 @@ class ProductoForm(forms.ModelForm):
             if imagen_anterior and (nueva or quitar):
                 imagen_anterior.delete(save=False)
         return producto
+
+
+class CompraForm(forms.Form):
+    """Valida la cantidad de una compra contra el stock disponible."""
+    cantidad = forms.IntegerField(
+        min_value=1,
+        error_messages={
+            'required': 'Indica la cantidad a comprar.',
+            'invalid': 'La cantidad debe ser un número entero.',
+            'min_value': 'La cantidad debe ser al menos 1.',
+        },
+    )
+
+    def __init__(self, *args, producto=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.producto = producto
+
+    def clean_cantidad(self):
+        cantidad = self.cleaned_data['cantidad']
+        if self.producto is not None and cantidad > self.producto.stock:
+            raise forms.ValidationError(
+                f'Solo quedan {self.producto.stock} unidades de "{self.producto.nombre}".'
+            )
+        return cantidad
+

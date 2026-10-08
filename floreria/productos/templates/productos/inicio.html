@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Florería Flowery</title>
+
     <style>
         body {
             font-family: 'Trebuchet MS', Arial, sans-serif;
@@ -12,6 +13,7 @@
             padding: 0;
             color: #f5f0dc;
         }
+
         .enredadera-izq, .enredadera-der {
             position: fixed;
             top: 0;
@@ -23,114 +25,624 @@
             opacity: 0.85;
             z-index: 0;
         }
-        .enredadera-izq { left: 0; }
-        .enredadera-der { right: 0; transform: scaleX(-1); }
+
+        .enredadera-izq {
+            left: 0;
+        }
+
+        .enredadera-der {
+            right: 0;
+            transform: scaleX(-1);
+        }
 
         .contenedor {
-            width: 80%;
-            max-width: 1000px;
+            width: 85%;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 30px 0 60px;
+            padding: 30px 0 80px;
             position: relative;
             z-index: 1;
         }
+
+        .esquina {
+            position: absolute;
+            width: 190px;
+            opacity: 0.9;
+            image-rendering: pixelated;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .esquina-sup-izq {
+            top: -10px;
+            left: -20px;
+            transform: scaleX(-1) scaleY(-1);
+        }
+
+        .esquina-inf-der {
+            bottom: 0px;
+            right: -20px;
+        }
+
+        .esquina-sup-der {
+            top: -10px;
+            right: -20px;
+            transform: scaleY(-1);
+        }
+
+        .esquina-inf-izq {
+            bottom: 0px;
+            left: -20px;
+            transform: scaleX(-1);
+        }
+
+        .detalle {
+            position: absolute;
+            width: 90px;
+            opacity: 0.9;
+            image-rendering: pixelated;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .detalle-1 {
+            top: 150px;
+            left: 6%;
+            transform: rotate(-12deg);
+        }
+
+        .detalle-2 {
+            top: 120px;
+            right: 8%;
+            transform: rotate(10deg);
+        }
+
+        .detalle-3 {
+            bottom: 60px;
+            left: 14%;
+            transform: rotate(8deg) scaleX(-1);
+        }
+
+        .detalle-4 {
+            top: 350px;
+            right: 3%;
+            transform: rotate(-6deg);
+            width: 70px;
+        }
+
+        .detalle-5 {
+            bottom: 120px;
+            right: 16%;
+            transform: rotate(14deg) scaleX(-1);
+            width: 70px;
+        }
+
         .logo-wrap {
             text-align: center;
             margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
+
         .logo-wrap img {
             width: 110px;
             image-rendering: pixelated;
         }
+
         h1 {
             text-align: center;
             color: #ffd34d;
             text-shadow: 2px 2px 0 #3e2f0a;
             margin-top: 0;
+            position: relative;
+            z-index: 1;
         }
+
         .divisoria {
             display: block;
             margin: 10px auto 30px;
             width: 280px;
             image-rendering: pixelated;
+            position: relative;
+            z-index: 1;
         }
+
         .btn-admin {
             display: block;
             width: 160px;
             margin: 0 auto 30px;
-            background-image: url("{% static 'productos/img/inicio.png' %}");
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            color: #fff;
+            background-color: #1a1a2e;
+            border: 3px solid #ffd34d;
+            color: #ffd34d;
             text-align: center;
             text-decoration: none;
             font-weight: bold;
-            padding: 18px 0 14px;
-            image-rendering: pixelated;
+            padding: 12px 0;
+            border-radius: 4px;
+            position: relative;
+            z-index: 1;
         }
+
+        .btn-admin:hover {
+            background-color: #ffd34d;
+            color: #1a1a2e;
+        }
+
         .productos {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+            position: relative;
+            z-index: 1;
         }
+
+        @media (max-width: 700px) {
+            .productos {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .producto {
+            background-color: #1f1f30;
+            border: 2px solid #4a3a12;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+            min-height: 180px;
+        }
+
+        .foto-marco {
+            width: 180px;
+            flex-shrink: 0;
             background-image: url("{% static 'productos/img/caja_de_informacion.png' %}");
             background-size: 100% 100%;
             background-repeat: no-repeat;
-            padding: 36px 24px 24px;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 26px 24px;
+            box-sizing: border-box;
         }
+
+        .foto {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+            display: block;
+        }
+
+        .sin-foto {
+            font-size: 40px;
+        }
+
+        .producto-info {
+            padding: 16px 18px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 0;
+        }
+
         .producto h2 {
-            margin-top: 0;
+            margin: 0 0 6px;
             color: #ffd34d;
-            font-size: 18px;
+            font-size: 16px;
         }
-        .producto p {
+
+        .producto .desc {
             font-size: 13px;
             color: #e8e0c8;
+            margin: 0;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
+
         .precio {
             font-weight: bold;
             color: #ffb84d;
-            font-size: 16px;
+            font-size: 15px;
+            margin: 8px 0 2px;
         }
+
         .stock {
             font-size: 12px;
             color: #bbb;
+            margin: 0;
         }
-        .foto { width: 100%; height: 150px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; display: block; }
-        .sin-foto { width: 100%; height: 150px; border-radius: 6px; background: #2a2a3d; display: flex; align-items: center; justify-content: center; font-size: 40px; }
-        .sin-productos { text-align: center; color: #bbb; grid-column: 1 / -1; }
+
+        .sin-productos {
+            text-align: center;
+            color: #bbb;
+            grid-column: 1 / -1;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* BOTÓN DE MÚSICA */
+
+        .btn-musica {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #1a1a2e;
+            border: 2px solid #ffd34d;
+            color: #ffd34d;
+            padding: 10px 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 1001;
+        }
+
+        .btn-musica:hover {
+            background-color: #ffd34d;
+            color: #1a1a2e;
+        }
+
+        /* MENSAJES */
+
+        .mensaje,
+        .mensaje-error {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto 20px;
+            padding: 12px 16px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .mensaje {
+            background: #1f3a24;
+            border: 2px solid #4caf50;
+            color: #b9f6ca;
+        }
+
+        .mensaje-error {
+            background: #3a1f1f;
+            border: 2px solid #e57373;
+            color: #ffcdd2;
+        }
+
+        /* COMPRA */
+
+        .compra {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .compra input[type="number"] {
+            width: 60px;
+            padding: 6px;
+            border-radius: 4px;
+            border: 2px solid #4a3a12;
+            background: #141420;
+            color: #f5f0dc;
+        }
+
+        .btn-comprar {
+            background-color: #1a1a2e;
+            border: 2px solid #ffd34d;
+            color: #ffd34d;
+            padding: 7px 14px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-comprar:hover {
+            background-color: #ffd34d;
+            color: #1a1a2e;
+        }
+
+        .agotado {
+            color: #e57373;
+            font-weight: bold;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        /* ========================= */
+        /* CUADRO DE CONTACTO FLOWERY */
+        /* ========================= */
+
+        .contacto-flowery {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            width: 230px;
+            padding: 16px;
+            background-color: #1f1f30;
+            border: 2px solid #ffd34d;
+            border-radius: 10px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+        }
+
+        .contacto-titulo {
+            color: #ffd34d;
+            font-weight: bold;
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+
+        .contacto-item {
+            color: #f5f0dc;
+            font-size: 13px;
+            margin: 7px 0;
+        }
+
+        /* En pantallas pequeñas */
+
+        @media (max-width: 700px) {
+            .contacto-flowery {
+                right: 10px;
+                bottom: 10px;
+                width: 190px;
+                padding: 12px;
+            }
+
+            .contacto-titulo {
+                font-size: 15px;
+            }
+
+            .contacto-item {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-<div class="enredadera-izq"></div>
-<div class="enredadera-der"></div>
+    <div class="enredadera-izq"></div>
+    <div class="enredadera-der"></div>
 
-<div class="contenedor">
-    <div class="logo-wrap">
-        <img src="{% static 'productos/img/CARAFLOWEY.png' %}" alt="Florería Flowery">
-    </div>
-    <h1>Florería Flowery</h1>
-    <img class="divisoria" src="{% static 'productos/img/enredadera_de_medio_abajo.png' %}" alt="">
 
-    <a href="{% url 'panel_admin' %}" class="btn-admin">Admin</a>
+    <!-- ========================= -->
+    <!-- CUADRO DE CONTACTO -->
+    <!-- ========================= -->
 
-    <div class="productos">
-        {% for producto in productos %}
-        <div class="producto">
-            {% if producto.imagen %}<img src="{{ producto.imagen.url }}" class="foto" alt="{{ producto.nombre }}">
-            {% else %}<div class="sin-foto">🌼</div>{% endif %}
-            <h2>{{ producto.nombre }}</h2>
-            <p>{{ producto.descripcion }}</p>
-            <p class="precio">${{ producto.precio }}</p>
-            <p class="stock">Stock: {{ producto.stock }}</p>
+    <div class="contacto-flowery">
+
+        <div class="contacto-titulo">
+            🌻 Contáctanos
         </div>
-        {% empty %}
-        <p class="sin-productos">No hay productos disponibles por el momento.</p>
-        {% endfor %}
+
+        <div class="contacto-item">
+            📞 +56 9 1234 5678
+        </div>
+
+        <div class="contacto-item">
+            ✉️ flowery@gmail.com
+        </div>
+
     </div>
-</div>
+
+
+    <!-- ========================= -->
+    <!-- MÚSICA -->
+    <!-- ========================= -->
+
+    <audio id="musica-fondo" loop>
+        <source src="{% static 'productos/audio/your_best_friend.mp3' %}" type="audio/mpeg">
+    </audio>
+
+    <button class="btn-musica" id="btn-musica" title="Reproducir/Pausar música">
+        🔇
+    </button>
+
+
+    <div class="contenedor">
+
+        <img class="esquina esquina-sup-izq"
+             src="{% static 'productos/img/diana_de_esquina_derecha_abajo.png' %}"
+             alt="">
+
+        <img class="esquina esquina-inf-der"
+             src="{% static 'productos/img/diana_de_esquina_derecha_abajo.png' %}"
+             alt="">
+
+        <img class="esquina esquina-sup-der"
+             src="{% static 'productos/img/diana_de_esquina_derecha_abajo.png' %}"
+             alt="">
+
+        <img class="esquina esquina-inf-izq"
+             src="{% static 'productos/img/diana_de_esquina_derecha_abajo.png' %}"
+             alt="">
+
+
+        <img class="detalle detalle-1"
+             src="{% static 'productos/img/detalles.png' %}"
+             alt="">
+
+        <img class="detalle detalle-2"
+             src="{% static 'productos/img/detalles.png' %}"
+             alt="">
+
+        <img class="detalle detalle-3"
+             src="{% static 'productos/img/detalles.png' %}"
+             alt="">
+
+        <img class="detalle detalle-4"
+             src="{% static 'productos/img/detalles.png' %}"
+             alt="">
+
+        <img class="detalle detalle-5"
+             src="{% static 'productos/img/detalles.png' %}"
+             alt="">
+
+
+        <div class="logo-wrap">
+            <img src="{% static 'productos/img/CARAFLOWEY.png' %}"
+                 alt="Florería Flowery">
+        </div>
+
+        <h1>Florería Flowery</h1>
+
+        <img class="divisoria"
+             src="{% static 'productos/img/enredadera_de_medio_abajo.png' %}"
+             alt="">
+
+
+        <a href="{% url 'panel_admin' %}" class="btn-admin">
+            Admin
+        </a>
+
+
+        {% for m in messages %}
+
+            <div class="{% if m.tags == 'error' %}mensaje-error{% else %}mensaje{% endif %}">
+                {{ m }}
+            </div>
+
+        {% endfor %}
+
+
+        <!-- ========================= -->
+        <!-- PRODUCTOS -->
+        <!-- ========================= -->
+
+        <div class="productos">
+
+            {% for producto in productos %}
+
+            <div class="producto">
+
+                <div class="foto-marco">
+
+                    {% if producto.imagen %}
+
+                        <img src="{{ producto.imagen.url }}"
+                             class="foto"
+                             alt="{{ producto.nombre }}">
+
+                    {% else %}
+
+                        <div class="sin-foto">
+                            🌼
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="producto-info">
+
+                    <h2>
+                        {{ producto.nombre }}
+                    </h2>
+
+                    <p class="desc">
+                        {{ producto.descripcion }}
+                    </p>
+
+                    <p class="precio">
+                        ${{ producto.precio }}
+                    </p>
+
+                    <p class="stock">
+                        Stock: {{ producto.stock }}
+                    </p>
+
+
+                    {% if producto.stock > 0 %}
+
+                        <form method="POST"
+                              action="{% url 'comprar_producto' producto.id %}"
+                              class="compra">
+
+                            {% csrf_token %}
+
+                            <input type="number"
+                                   name="cantidad"
+                                   value="1"
+                                   min="1"
+                                   max="{{ producto.stock }}"
+                                   required>
+
+                            <button type="submit"
+                                    class="btn-comprar">
+                                Comprar
+                            </button>
+
+                        </form>
+
+                    {% else %}
+
+                        <p class="agotado">
+                            Agotado
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+                <p class="sin-productos">
+                    No hay productos disponibles por el momento.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- JAVASCRIPT DE LA MÚSICA -->
+    <!-- ========================= -->
+
+    <script>
+
+        const musica = document.getElementById("musica-fondo");
+        const btn = document.getElementById("btn-musica");
+
+        musica.volume = 0.15;
+
+
+        musica.addEventListener("loadedmetadata", function() {
+
+            musica.currentTime = 1;
+
+        });
+
+
+        btn.addEventListener("click", function() {
+
+            if (musica.paused) {
+
+                musica.currentTime = 1;
+
+                musica.play();
+
+                btn.textContent = "🔊";
+
+            } else {
+
+                musica.pause();
+
+                btn.textContent = "🔇";
+
+            }
+
+        });
+
+    </script>
+
 </body>
 </html>
